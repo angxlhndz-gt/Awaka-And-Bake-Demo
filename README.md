@@ -22,7 +22,8 @@ Importar este directorio como proyecto Vite. Vercel detecta `npm run build` y pu
 - Cotizaciones, cambios de estado, notas, historial y avisos simulados se guardan en `localStorage` **del navegador y dispositivo actual**. No existe base de datos compartida, correo enviado ni sincronización entre usuarios.
 - El panel `/admin` carece de autenticación real. El botón de WhatsApp abre un mensaje para envío manual solo si la solicitud contiene un teléfono ingresado en la demo; los registros ficticios no tienen un destino real. El canal WhatsApp de Awake & Bake sigue pendiente de confirmar.
 - La aprobación de producción y los estados de pago se registran manualmente en la demo. No se procesan pagos ni se confirma un pedido de forma automática.
-- Ilustraciones de pasteles creadas con CSS como referencias; no se reutilizan fotografías de redes sociales.
+- Fotografías de producto provisionales guardadas como WebP locales; no se reutilizan imágenes de Instagram. Las fuentes y el reemplazo están documentados en `public/images/awake-bake/SOURCES.md`, y los metadatos están centralizados en `src/visuals.ts`.
+- La galería permite ampliar fotografías, navegar con botones o teclado y cerrar con Escape. Las apariciones al desplazarse respetan `prefers-reduced-motion`.
 
 ## Antes de producción
 
@@ -30,4 +31,4 @@ Validar logo oficial, fotografías autorizadas, precios definitivos, productos e
 
 ## Verificación
 
-`node qa/run.mjs` ejecuta el recorrido de navegador (requiere Chrome instalado), comprueba las tres categorías, el cálculo, la imagen, el guardado, panel, filtros, WhatsApp manual, estados y producción, y genera capturas en `qa/` para 360, 390, 768, 1024 y 1440 px.
+`node qa/run.mjs` ejecuta el recorrido funcional (requiere Chrome instalado): categorías, cálculo, carga de imagen, guardado, panel, filtros, WhatsApp manual, estados y producción. `node qa/visual.mjs` comprueba las siete rutas en 360, 390, 768, 1024 y 1440 px, fotografías, galería, navegación por teclado y movimiento reducido. Las capturas nuevas se guardan en `qa/visual-2026-09-25/`.
