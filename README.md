@@ -17,22 +17,22 @@ Importar este directorio como proyecto Vite. Vercel detecta `npm run build` y pu
 
 ## Funciones de demostración
 
-- Solicitud por pasos para celebración, boda/XV años y Candy Bar; carga y vista previa de imagen.
+- Solicitud progresiva para celebración, boda/XV años y Candy Bar; carga y vista previa de imagen.
 - Precio estimado calculado en el navegador. `Q375 desde 10 porciones` es la única referencia indicada en los requisitos. **Todos los demás importes son provisionales** y están centralizados en `src/data.ts` bajo `pricingConfig.provisionalDemo`.
 - Cotizaciones, cambios de estado, notas, historial y avisos simulados se guardan en `localStorage` **del navegador y dispositivo actual**. No existe base de datos compartida, correo enviado ni sincronización entre usuarios.
 - El panel `/admin` carece de autenticación real. El botón de WhatsApp abre un mensaje para envío manual solo si la solicitud contiene un teléfono ingresado en la demo; los registros ficticios no tienen un destino real. El canal WhatsApp de Awake & Bake sigue pendiente de confirmar.
 - La aprobación de producción y los estados de pago se registran manualmente en la demo. No se procesan pagos ni se confirma un pedido de forma automática.
 - Fotografías de producto provisionales guardadas como WebP locales; no se reutilizan imágenes de Instagram. Las fuentes y el reemplazo están documentados en `public/images/awake-bake/SOURCES.md`, y los metadatos están centralizados en `src/visuals.ts`.
 - La galería permite ampliar fotografías, navegar con botones o teclado y cerrar con Escape. Las apariciones al desplazarse respetan `prefers-reduced-motion`.
-- La portada usa una secuencia de cinco escenas en `src/ScrollCakeExperience.tsx`, con estilos acotados en `src/scroll-cake.css`. CSS sticky mantiene el escenario bajo el header, sin bloquear el scroll; la página continúa al terminar. Los controles numerados y «Saltar presentación» permiten recorrerla con teclado.
+- La portada usa un hero de dos columnas en `src/PublicHero.tsx` y `src/public-hero.css`. Ocupa el flujo normal de la página y desvanece ligeramente texto e imagen al desplazarse. En móvil, el texto precede a la imagen. Con movimiento reducido no se aplican desplazamientos ni opacidad.
 
-## Presentación controlada por scroll
+## Cotizador progresivo
 
-La sección mide `500svh` en escritorio y `460svh` en móvil. El progreso es `clamp((alturaHeader - section.getBoundingClientRect().top) / (alturaSección - alturaEscenario), 0, 1)`. Un listener pasivo solicita como máximo un `requestAnimationFrame` pendiente; actualiza transformaciones y opacidad directamente, sin re-renderizar React en cada frame. `IntersectionObserver` suspende las actualizaciones fuera de pantalla y todos los listeners, observers y frames se limpian al desmontar. No se añadieron librerías.
+`QuoteFlow` mantiene el modelo y cálculo existentes en `src/data.ts` y el guardado en `localStorage` con la clave `awake-bake-demo-v1`. Ocho secciones desplegables muestran tipo de producto, contacto, porciones o productos, diseño, fecha, modalidad, estimación y revisión. La selección del producto, porciones y modalidad abre la siguiente sección; los grupos de datos avanzan al completarse. Los encabezados anteriores permiten editar sin perder lo capturado. El envío sigue requiriendo una revisión y aceptación explícita.
 
-En móvil se apilan fotografía y texto, se elimina el desplazamiento lateral y se limita el zoom. Con `prefers-reduced-motion: reduce` o una pantalla de hasta 560 px de alto se presenta la narrativa completa en flujo normal: cinco textos visibles, tres fotos y CTAs accesibles, sin sección alta ni sticky. Las consultas de viewport y el acceso a `window` ocurren en efectos o eventos del cliente; el primer render del componente es estable.
+`quoteTypeImages` y `portionPreviewMap` en `src/visuals.ts` centralizan las fotografías locales WebP y la información de referencia para 10, 15, 20 y 25 porciones. **Las fotografías no acreditan medidas exactas ni trabajos de Awake & Bake.** Las medidas son las referencias recogidas del cliente; la imagen de cada opción es solo ilustrativa y deberá sustituirse por una original autorizada. En móvil el resumen aparece como tarjeta normal al final del formulario. `prefers-reduced-motion` quita las transiciones y el desplazamiento automático.
 
-`experienceImages` en `src/visuals.ts` asigna `xv.webp`, `design-help.webp` y `hero.webp` a las escenas. Son fotografías provisionales de terceros ya documentadas, no trabajos acreditados de Awake & Bake. Se sustituyen en el manifiesto sin modificar la animación. La referencia externa de Adidas solo se intentó consultar por su interacción; permaneció en carga y no se copiaron código, imágenes ni composición.
+El hero usa `xv.webp`. Las tarjetas del cotizador usan `celebration.webp`, `wedding.webp` y `candy-bar.webp`; las vistas de porciones usan `celebration.webp`, `custom-design.webp`, `design-help.webp` y `closing.webp`. Todas son referencias provisionales de terceros documentadas en `public/images/awake-bake/SOURCES.md`.
 
 ## Antes de producción
 
@@ -40,6 +40,6 @@ Validar logo oficial, fotografías autorizadas, precios definitivos, productos e
 
 ## Verificación
 
-`node qa/run.mjs` ejecuta el recorrido funcional (requiere Chrome instalado): categorías, cálculo, carga de imagen, guardado, panel, filtros, WhatsApp manual, estados y producción. `node qa/visual.mjs` comprueba las siete rutas en 360, 390, 768, 1024 y 1440 px, fotografías, galería, navegación por teclado y movimiento reducido. Las capturas nuevas se guardan en `qa/visual-2026-09-25/`.
+`node qa/run.mjs` ejecuta el recorrido funcional sobre `http://localhost:4173` (o `QA_URL`): hero y fade, imágenes por tipo, cuatro porciones, edición de elecciones, carga de imagen, envío, panel, filtros, WhatsApp manual, estados, Candy Bar y producción. Las capturas están en `qa/progressive-2026-09-25/`.
 
-`node qa/scroll.mjs` verifica el build servido en `http://localhost:4173` (o `QA_URL`): cinco escenas en los cinco anchos, sticky y liberación, progreso, zoom, encuadres, teclado, salto de la presentación, CTA al cotizador, movimiento reducido y pantallas bajas. Las capturas por escena y los resultados están en `qa/scroll-experience/`. Una captura de página completa no representa todos los estados de una sección sticky; consultar las capturas por escena.
+`node qa/visual.mjs` comprueba las siete rutas en 360, 390, 768, 1024 y 1440 px, fotografías, galería, navegación por teclado y movimiento reducido. Sus capturas están en `qa/visual-2026-09-25/`.

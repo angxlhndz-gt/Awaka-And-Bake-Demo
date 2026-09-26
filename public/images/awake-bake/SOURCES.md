@@ -2,6 +2,8 @@
 
 Estas imágenes son **referencias visuales de terceros**, no fotografías atribuidas a Awake & Bake. Se descargaron localmente en WebP desde las páginas de Unsplash indicadas abajo, publicadas como gratuitas bajo la [licencia de Unsplash](https://unsplash.com/license). Su uso en esta demo es provisional; la selección visual y cualquier uso de marca deben validarse con Awake & Bake antes de presentar el sitio como oficial. No se descargaron imágenes de Instagram ni se depende de su CDN.
 
+El hero utiliza `xv.webp`. En el cotizador, `src/visuals.ts` asigna las imágenes por tipo de solicitud y las vistas de 10, 15, 20 y 25 porciones. **Estas fotos ilustran estilos diferentes; no muestran un producto de Awake & Bake ni verifican las dimensiones indicadas para cada tamaño.** Las medidas son referencias textuales separadas de la fotografía.
+
 | Archivo local | Autor | Fuente |
 | --- | --- | --- |
 | `hero.webp` | Lucas T Photography | [Pasteles blancos con rosas](https://unsplash.com/photos/three-tiered-white-cakes-decorated-with-pink-roses-and-greenery-Dfm_QyLkIlw) |

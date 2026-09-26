@@ -25,13 +25,19 @@ export const customDesignImage = asset('custom-design', 'Pastel blanco de dos ni
 export const xvImage = asset('xv', 'Pastel blanco de varios niveles con flores blancas y acabado moderno, fotografía de referencia', 900, 1390, 'https://unsplash.com/photos/elegant-white-tiered-wedding-cake-with-calla-lilies-3olsktlzxNw', 'Karie Sconyers');
 export const designHelpImage = asset('design-help', 'Pastel de tres niveles con flores rosadas y mesa de postres, fotografía de referencia', 1600, 1068, 'https://unsplash.com/photos/beautiful-three-tiered-wedding-cake-with-pink-flowers-and-desserts-AnUQUCQelww', 'Jonathan Borba');
 export const closingImage = asset('closing', 'Pastel blanco de varios niveles sobre una mesa de celebración, fotografía de referencia', 1200, 1880, 'https://unsplash.com/photos/elegant-white-tiered-wedding-cake-with-topper-a4AXm3Kteug', 'Lucas T Photography');
-// Referencias provisionales de terceros; sustituir aquí por originales autorizados.
-// La secuencia reutiliza tres archivos existentes sin añadir descargas ni duplicados.
-export const experienceImages = {
-  heroCake: {...xvImage, position: '50% 54%'},
-  cakeDetail: {...designHelpImage, position: '50% 50%'},
-  celebrationCake: {...heroImage, position: '50% 50%'},
-};
+// Fotografías de referencia, no equivalencias exactas de tamaño ni productos de Awake & Bake.
+// Sustituir cada archivo por una fotografía original autorizada antes de uso oficial.
+export const quoteTypeImages = {
+  'Pastelito de celebración': celebrationImage,
+  'Pastel de boda o XV años': weddingsImage,
+  'Producto para Candy Bar': candyBarImage,
+} as const;
+export const portionPreviewMap = {
+  10: {image: celebrationImage, label:'10 porciones', dimensions:'Aprox. 10 cm alto × 15 cm ancho', fillingLayers:'1 capa de relleno'},
+  15: {image: customDesignImage, label:'15 porciones', dimensions:'Aprox. 14 cm alto × 15 cm ancho', fillingLayers:'2 capas de relleno'},
+  20: {image: designHelpImage, label:'20 porciones', dimensions:'Aprox. 16 cm alto × 17 cm ancho', fillingLayers:'2 capas de relleno'},
+  25: {image: closingImage, label:'25 porciones', dimensions:'Aprox. 14 cm alto × 21 cm ancho', fillingLayers:'2 capas de relleno'},
+} as const;
 export const galleryImages = [
   {title:'Celebraciones con color', category:'Celebración', ...asset('gallery-floral-cake', 'Pastel turquesa con decoración rosada y grageas de colores, fotografía de referencia', 1000, 807, 'https://unsplash.com/photos/pink-and-white-floral-cake-g5bgYkKa8y0', 'David Holifield')},
   {title:'Detalles de boda', category:'Bodas y XV años', ...asset('gallery-wedding-white', 'Pastel blanco de dos niveles con flores claras y detalles delicados, fotografía de referencia', 1000, 667, 'https://unsplash.com/photos/a-tiered-wedding-cake-decorated-with-white-flowers-BpnJmu37a2o', 'Brooke Balentine')},

@@ -1,0 +1,65 @@
+/* Guided public quote interface. No admin selectors are changed. */
+.quote-progressive .quote-intro{margin-bottom:30px}
+.quote-progressive .quote-shell{overflow:visible}
+.quote-flow-top{display:flex;justify-content:space-between;gap:16px;padding:22px 36px;border-bottom:1px solid #eee5dc;color:#926e5e;font-size:10px;font-weight:700;letter-spacing:.16em}
+.quote-progressive .quote-main{grid-template-columns:minmax(0,1fr) 290px;align-items:start}
+.quote-progressive .quote-form{min-height:0;min-width:0;padding:26px 34px 36px}
+.quote-progressive .quote-aside{align-self:stretch;min-width:0;padding:30px 21px}
+.quote-progressive .aside-card{position:sticky;top:110px}
+.quote-section{border:1px solid #e8ded4;margin-bottom:12px;min-width:0;background:#fff;scroll-margin-top:104px;outline:none;transition:border-color .24s,box-shadow .24s}
+.quote-section.is-open{border-color:#c9ad9d;box-shadow:0 12px 27px #513a2c0b}
+.quote-section:focus-visible,.quote-section-head:focus-visible,.quote-progressive button:focus-visible,.quote-progressive input:focus-visible,.quote-progressive textarea:focus-visible{outline:3px solid #ad7869;outline-offset:3px}
+.quote-section-head{width:100%;border:0;background:#fff;text-align:left;min-height:76px;padding:15px 19px;display:flex;align-items:center;gap:16px;color:#483c36}
+.quote-section-head:disabled{cursor:default;opacity:1;background:#fcfaf8}
+.quote-section.is-open .quote-section-head{background:#faf6f1}
+.quote-section-number{font:italic 20px 'Playfair Display',serif;color:#b48170;flex:none;width:28px}
+.quote-section-heading{display:flex;min-width:0;flex:1;flex-direction:column;gap:3px}
+.quote-section-heading strong{font-size:15px;line-height:1.25}
+.quote-section-heading small{font-size:11px;line-height:1.4;color:#95877c;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.quote-section-status{color:#9a7665;font-size:10px;font-weight:700;white-space:nowrap}
+.quote-section.is-pending .quote-section-number,.quote-section.is-pending .quote-section-heading strong,.quote-section.is-pending .quote-section-status{color:#ad9f94}
+.quote-section-content{padding:24px 24px 27px;animation:quote-section-enter .34s both}
+.quote-section-content .form-lead{margin-bottom:18px}
+@keyframes quote-section-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.quote-progressive .type-grid{gap:12px}
+.quote-progressive .type-card{min-height:0;display:block;padding:0;overflow:hidden;border-radius:3px}
+.quote-progressive .type-card-photo{display:block;width:100%;height:135px;object-fit:cover;object-position:center}
+.quote-progressive .type-card-copy{display:block;padding:14px 13px 16px}
+.quote-progressive .type-card-copy strong,.quote-progressive .type-card-copy small{display:block}
+.quote-progressive .type-card strong{font-size:17px;line-height:1.25;margin:0 0 7px}
+.quote-progressive .type-card small{font-size:11px;line-height:1.4}
+.quote-progressive .type-card .radio-mark{top:10px;right:10px;background:#fff}
+.quote-client-grid{display:grid;grid-template-columns:190px minmax(0,1fr);gap:23px;align-items:start}
+.quote-selected-photo{position:relative;overflow:hidden;background:#f0e7df;min-height:260px;animation:quote-section-enter .4s both}
+.quote-selected-photo img{display:block;width:100%;height:260px;object-fit:cover}
+.quote-selected-photo span{position:absolute;bottom:6px;left:6px;right:6px;text-align:center;background:#fffaf1e8;font-size:9px;padding:6px 5px;line-height:1.3}
+.quote-portion-layout{display:grid;grid-template-columns:minmax(170px,.85fr) minmax(0,1.15fr);gap:24px;align-items:start}
+.quote-portion-preview{background:#f7f1eb;animation:quote-section-enter .36s both;min-width:0}
+.quote-portion-preview img{display:block;width:100%;height:280px;object-fit:cover;object-position:center}
+.quote-portion-preview>div{padding:13px 15px 4px}.quote-portion-preview strong{display:block;font:22px 'Playfair Display',serif;color:#4c3b31}.quote-portion-preview span{font-size:11px;color:#716257;line-height:1.5}
+.quote-portion-preview>small{display:block;padding:0 15px 15px;font-size:9px;color:#9b796b;line-height:1.4}
+.quote-portion-controls .portion-options button{min-width:65px;padding:9px 7px}
+.quote-portion-controls .reference{margin-top:17px}
+.quote-portion-controls input{width:100%;max-width:100%}
+.quote-progressive .choice-list{margin-bottom:18px}
+.quote-review-action,.quote-submit-action{margin-top:13px}
+.quote-live-summary{display:grid;gap:10px;margin:0}
+.quote-live-summary>div{border-bottom:1px solid #eee8e1;padding-bottom:8px;min-width:0}
+.quote-live-summary dt{font-size:10px;color:#9b8a7d;margin-bottom:3px}
+.quote-live-summary dd{font-size:12px;color:#55473d;margin:0;overflow-wrap:anywhere;line-height:1.4}
+.quote-progressive .aside-foot{line-height:1.5;margin-top:13px}
+@media(max-width:1000px){.quote-progressive .quote-main{grid-template-columns:minmax(0,1fr) 245px}.quote-progressive .quote-form{padding:25px}.quote-progressive .type-card-photo{height:110px}.quote-portion-layout{grid-template-columns:minmax(145px,.8fr) minmax(0,1.2fr);gap:17px}.quote-portion-preview img{height:230px}}
+@media(max-width:800px){.quote-progressive .quote-main{grid-template-columns:1fr}.quote-progressive .quote-aside{border-left:0;border-top:1px solid #eee5dd;padding:22px}.quote-progressive .aside-card{display:block;position:static}.quote-live-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 18px}}
+@media(max-width:640px){.quote-flow-top{padding:17px 19px}.quote-progressive .quote-form{padding:18px}.quote-section-head{min-height:68px;padding:12px;gap:10px}.quote-section-number{font-size:18px;width:24px}.quote-section-heading strong{font-size:14px}.quote-section-heading small{font-size:10px}.quote-section-status{font-size:9px}.quote-section-content{padding:19px 15px 21px}.quote-progressive .type-grid{grid-template-columns:1fr}.quote-progressive .type-card{display:grid;grid-template-columns:105px minmax(0,1fr);min-height:105px}.quote-progressive .type-card-photo{height:100%;min-height:105px}.quote-progressive .type-card-copy{padding:15px}.quote-progressive .type-card strong{font-size:17px}.quote-client-grid,.quote-portion-layout{grid-template-columns:1fr}.quote-selected-photo{min-height:0}.quote-selected-photo img{height:210px}.quote-portion-preview img{height:230px}.quote-progressive .choice-list.inline{flex-direction:column}.quote-progressive .choice-list.inline button{width:100%}.quote-progressive .aside-card{padding:18px}.quote-live-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:390px){.quote-progressive .type-card{grid-template-columns:92px minmax(0,1fr)}.quote-progressive .type-card-copy{padding:11px}.quote-progressive .type-card strong{font-size:15px}.quote-section-status{max-width:46px;white-space:normal;text-align:right}.quote-progressive .portion-options button{min-width:58px}}
+@media(prefers-reduced-motion:reduce){.quote-progressive *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+.quote-current-portion{display:flex;align-items:center;gap:16px;background:#f7f1eb;padding:9px;margin-bottom:19px;animation:quote-section-enter .35s both}
+.quote-current-portion img{width:92px;height:88px;object-fit:cover;flex:none}
+.quote-current-portion>div{min-width:0;overflow-wrap:anywhere}
+.quote-current-portion strong,.quote-current-portion span,.quote-current-portion small{display:block}
+.quote-current-portion strong{font:19px 'Playfair Display',serif;color:#4d3e35}
+.quote-current-portion span{font-size:11px;color:#736258;line-height:1.45;margin:4px 0}
+.quote-current-portion small{font-size:9px;color:#987c70}
+.quote-progressive .upload-box{position:relative}
+.quote-progressive .upload-box input[type=file]{display:block;position:absolute;top:50%;left:50%;width:1px;height:1px;opacity:0;pointer-events:none}
+.quote-progressive .upload-box:focus-within{outline:3px solid #ad7869;outline-offset:3px}

@@ -2,7 +2,7 @@ import {useEffect,useRef,useState,type CSSProperties} from 'react';
 import {createPortal} from 'react-dom';
 import {ArrowRight,ChevronLeft,ChevronRight,Instagram,MapPin,Phone,Maximize2,X} from 'lucide-react';
 import {business} from './data';
-import {ScrollCakeExperience} from './ScrollCakeExperience';
+import {PublicHero} from './PublicHero';
 import {candyBarImage,celebrationImage,closingImage,customDesignImage,designHelpImage,galleryImages,weddingsImage,welcomeImage,xvImage,type VisualAsset} from './visuals';
 
 type PublicRoute='/'|'/productos'|'/cotiza-tu-propio-pastel';
@@ -83,8 +83,8 @@ export function Home({go}:{go:Navigate}){
   const process=['Cuéntanos tu idea','Comparte fecha y detalles','Recibe una estimación','Revisamos tu solicitud','Confirmamos contigo'];
   const processCopy=['Elige el tipo de producto que imaginas.','Agrega porciones, ubicación y una imagen si la tienes.','Mira una referencia de precio sujeta a confirmación.','Awake & Bake verifica disponibilidad y detalles.','El equipo te contacta personalmente para definir el pedido.'];
   return <main className="public-page">
-    <ScrollCakeExperience go={go}/>
-    <section className="intro-section public-intro container" id="after-cake-experience" tabIndex={-1}><div className="public-intro-copy" data-reveal><p className="eyebrow">BIENVENIDOS A AWAKE & BAKE</p><h2>El pastel también<br/>cuenta la historia.</h2><p>Desde un cumpleaños íntimo hasta una celebración grande, cada solicitud comienza con los detalles que la hacen única: la fecha, las personas y el estilo que imaginas.</p><p>Cuéntanos qué necesitas. Nuestro equipo revisará tu solicitud y se comunicará personalmente para confirmar la propuesta.</p><span className="intro-signature">Cada idea merece atención personal <span>✳</span></span></div><div className="public-intro-photo" data-reveal><Photo image={welcomeImage}/><span>Imagen de referencia para demostración</span></div></section>
+    <PublicHero go={go}/>
+    <section className="intro-section public-intro container" ><div className="public-intro-copy" data-reveal><p className="eyebrow">BIENVENIDOS A AWAKE & BAKE</p><h2>El pastel también<br/>cuenta la historia.</h2><p>Desde un cumpleaños íntimo hasta una celebración grande, cada solicitud comienza con los detalles que la hacen única: la fecha, las personas y el estilo que imaginas.</p><p>Cuéntanos qué necesitas. Nuestro equipo revisará tu solicitud y se comunicará personalmente para confirmar la propuesta.</p><span className="intro-signature">Cada idea merece atención personal <span>✳</span></span></div><div className="public-intro-photo" data-reveal><Photo image={welcomeImage}/><span>Imagen de referencia para demostración</span></div></section>
     <section className="product-section public-products"><div className="container"><div className="section-heading" data-reveal><div><p className="eyebrow">PARA CADA OCASIÓN</p><h2>Algo especial para celebrar</h2></div><button className="text-link" onClick={()=>go('/productos')}>Ver todos los productos <ArrowRight size={16}/></button></div><div className="public-product-grid">{publicProducts.map((item,index)=><ServiceCard item={item} index={index} go={go} key={item.title}/>)}</div></div></section>
     <Gallery/>
     <section className="process-section public-process"><div className="container"><div className="section-heading" data-reveal><div><p className="eyebrow">ASÍ FUNCIONA</p><h2>De tu idea a una conversación</h2></div></div><div className="process-grid">{process.map((title,index)=><div className="process-item" data-reveal style={{'--reveal-delay':`${index*85}ms`} as CSSProperties} key={title}><span>0{index+1}</span><div className="process-dot"/><h3>{title}</h3><p>{processCopy[index]}</p></div>)}</div></div></section>
