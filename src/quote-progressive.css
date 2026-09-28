@@ -63,3 +63,26 @@
 .quote-progressive .upload-box{position:relative}
 .quote-progressive .upload-box input[type=file]{display:block;position:absolute;top:50%;left:50%;width:1px;height:1px;opacity:0;pointer-events:none}
 .quote-progressive .upload-box:focus-within{outline:3px solid #ad7869;outline-offset:3px}
+
+/* Every section remains available; manual selection controls the open panel. */
+.quote-section.is-pending .quote-section-heading strong{color:#483c36}
+.quote-section.is-suggested{border-color:#cfb4a4}
+.quote-section.is-suggested .quote-section-status{color:#8b5949}
+.quote-section-edit{font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.quote-section-head:hover{background:#faf7f3}
+.quote-progressive .type-grid{grid-template-columns:1fr}
+.quote-progressive .type-card{display:grid;grid-template-columns:148px minmax(0,1fr);min-height:108px}
+.quote-progressive .type-card-photo{height:108px;min-height:0}
+.quote-progressive .type-card-copy{padding:20px 40px 16px 20px}
+.quote-progressive .type-card strong{font-size:19px}
+.quote-progressive .portion-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.quote-progressive .portion-options button{min-width:0;text-align:left;padding:13px 16px;display:flex;align-items:baseline;gap:7px;transition:background-color .2s,border-color .2s}
+.quote-progressive .portion-options button:hover,.quote-progressive .portion-options button:focus-visible{border-color:#a87b6a;background:#f4e9e1}
+.quote-aside-preview{display:flex;align-items:center;gap:12px;margin-bottom:17px;background:#f8f2ec}
+.quote-aside-preview img{width:70px;height:70px;object-fit:cover;flex:none}
+.quote-aside-preview span{font:17px 'Playfair Display',serif;color:#4d3e35}
+.quote-aside-preview small{display:block;font:9px 'DM Sans',sans-serif;color:#987c70;margin-top:4px}
+.quote-review-action{margin-top:18px}
+@media(max-width:640px){.quote-progressive .type-card{grid-template-columns:110px minmax(0,1fr);min-height:105px}.quote-progressive .type-card-photo{height:105px}.quote-progressive .type-card-copy{padding:14px 30px 12px 14px}.quote-progressive .type-card strong{font-size:16px}.quote-flow-top{letter-spacing:.08em;font-size:9px}.quote-progressive .portion-options button{padding:11px}}
+@media(max-width:390px){.quote-progressive .type-card{grid-template-columns:96px minmax(0,1fr)}.quote-progressive .type-card-copy{padding:11px 27px 10px 11px}.quote-progressive .type-card strong{font-size:15px}.quote-progressive .portion-options button{gap:4px;padding:10px}.quote-progressive .portion-options strong{font-size:20px}}
+.quote-progressive .aside-logo{display:block;width:42px;height:42px;object-fit:contain;border-radius:50%}

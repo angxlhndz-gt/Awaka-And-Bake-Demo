@@ -1,31 +1,10 @@
-import {useEffect,useRef} from 'react';
 import {ArrowRight} from 'lucide-react';
 import {xvImage} from './visuals';
 import './public-hero.css';
 
 type Navigate = (route:'/'|'/productos'|'/cotiza-tu-propio-pastel') => void;
-const clamp=(value:number)=>Math.max(0,Math.min(1,value));
 export function PublicHero({go}:{go:Navigate}){
-  const hero=useRef<HTMLElement>(null);
-  useEffect(()=>{
-    const element=hero.current;
-    if(!element)return;
-    const motion=window.matchMedia('(prefers-reduced-motion: reduce)');
-    let frame=0;
-    const update=()=>{
-      frame=0;
-      if(motion.matches){element.style.setProperty('--hero-progress','0');return}
-      const bounds=element.getBoundingClientRect();
-      element.style.setProperty('--hero-progress',String(clamp(-bounds.top/(bounds.height*.85))));
-    };
-    const schedule=()=>{if(!frame)frame=requestAnimationFrame(update)};
-    window.addEventListener('scroll',schedule,{passive:true});
-    window.addEventListener('resize',schedule);
-    motion.addEventListener('change',schedule);
-    schedule();
-    return()=>{cancelAnimationFrame(frame);window.removeEventListener('scroll',schedule);window.removeEventListener('resize',schedule);motion.removeEventListener('change',schedule)};
-  },[]);
-  return <section className="calm-hero" ref={hero} aria-labelledby="calm-hero-title">
+  return <section className="calm-hero" aria-labelledby="calm-hero-title">
     <div className="calm-hero-inner container">
       <div className="calm-hero-copy"><div className="calm-hero-copy-inner">
         <p className="eyebrow">AWAKE & BAKE · PASTELERÍA PARA CELEBRAR</p>

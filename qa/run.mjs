@@ -2,7 +2,7 @@ import {chromium} from 'playwright';
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 const base=process.env.QA_URL||'http://localhost:4173';
-const shots='qa/progressive-2026-09-25';fs.mkdirSync(shots,{recursive:true});
+const shots='qa/updated-2026-09-28/functional';fs.mkdirSync(shots,{recursive:true});
 const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
 const context=await browser.newContext({viewport:{width:1440,height:900},deviceScaleFactor:1});
 const page=await context.newPage();const errors=[];
@@ -18,30 +18,38 @@ await shot('hero-1440');
 const start=await page.locator('.calm-hero-copy').evaluate(el=>Number(getComputedStyle(el).opacity));
 await page.evaluate(()=>window.scrollTo({top:document.querySelector('.calm-hero').offsetHeight*.48,behavior:'instant'}));await page.waitForTimeout(150);
 const faded=await page.locator('.calm-hero-copy').evaluate(el=>Number(getComputedStyle(el).opacity));
-assert.ok(faded<start-.15,`Hero did not fade: ${start} -> ${faded}`);
-await shot('hero-fade-1440');
+assert.ok(Math.abs(faded-start)<.01,`Hero opacity changed on scroll: ${start} -> ${faded}`);
+await shot('hero-scroll-static-1440');
 await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(150);
-assert.ok(await page.locator('.calm-hero-copy').evaluate(el=>Number(getComputedStyle(el).opacity))>.98,'Hero did not recover on upward scroll');
+assert.ok(await page.locator('.calm-hero-copy').evaluate(el=>Number(getComputedStyle(el).opacity))>.98,'Hero lost opacity');
 assert.equal(await page.locator('.cake-experience').count(),0,'Long sticky experience still rendered');
 await page.goto(base+'/cotiza-tu-propio-pastel');
 assert.equal(await page.getByRole('button',{name:/Continuar/}).count(),0,'Continue buttons remain');
+for(let index=0;index<8;index++){
+ const header=section(index).locator('.quote-section-head');
+ if(index!==0)await header.click();
+ assert.equal(await header.getAttribute('aria-expanded'),'true',`Section ${index} did not open`);
+ await header.click();
+ assert.equal(await header.getAttribute('aria-expanded'),'false',`Section ${index} did not close`);
+}
+await section(0).locator('.quote-section-head').click();
 const typeImages=[['Pastelito de celebración','celebration.webp'],['Pastel de boda o XV años','wedding.webp'],['Producto para Candy Bar','candy-bar.webp']];
 for(let i=0;i<typeImages.length;i++){
  const [type,file]=typeImages[i];if(i)await page.goto(base+'/cotiza-tu-propio-pastel');
- await section(0).getByRole('button',{name:new RegExp(type)}).click();await opened(1);
+ await section(0).getByRole('button',{name:new RegExp(type)}).click();await section(1).locator('.quote-section-head').click();await opened(1);
  const src=await section(1).locator('.quote-selected-photo img').getAttribute('src');assert.ok(src.endsWith(file),`${type}: ${src}`);
  await imageReady(section(1).locator('.quote-selected-photo img'));
 }
-await page.goto(base+'/cotiza-tu-propio-pastel');await section(0).getByRole('button',{name:/Pastelito de celebración/}).click();await opened(1);
+await page.goto(base+'/cotiza-tu-propio-pastel');await section(0).getByRole('button',{name:/Pastelito de celebración/}).click();await section(1).locator('.quote-section-head').click();await opened(1);
 await shot('quote-selected-1440');
 await section(1).getByPlaceholder('Tu nombre y apellido').fill('Prueba QA');
 await section(1).getByPlaceholder('nombre@ejemplo.com').fill('qa@example.test');
-await section(1).getByPlaceholder('+502 0000 0000').fill('+502 5555 0101');await opened(2);
+await section(1).getByPlaceholder('+502 0000 0000').fill('+502 5555 0101');await section(2).locator('.quote-section-head').click();await opened(2);
 const previews=[[10,'celebration.webp','Q375','1 capa de relleno','10 cm alto × 15 cm ancho'],[15,'custom-design.webp','Q460','2 capas de relleno','14 cm alto × 15 cm ancho'],[20,'design-help.webp','Q545','2 capas de relleno','16 cm alto × 17 cm ancho'],[25,'closing.webp','Q630','2 capas de relleno','14 cm alto × 21 cm ancho']];
 const portionImage=section(2).locator('.quote-portion-preview img');
 const portionText=section(2).locator('.quote-portion-preview');
 for(const [count,file,,layers,dimensions] of previews){
- const option=section(2).getByRole('button',{name:new RegExp(`${count} porciones`)});
+ const option=section(2).locator('.portion-options').getByRole('button',{name:new RegExp(`${count} porciones`)});
  await option.hover();
  assert.ok((await portionImage.getAttribute('src')).endsWith(file),`${count}: hover image`);
  assert.ok((await portionText.innerText()).includes(`${count} porciones`),`${count}: hover label`);
@@ -54,7 +62,7 @@ for(const [count,file,,layers,dimensions] of previews){
  assert.ok((await portionImage.getAttribute('src')).endsWith('celebration.webp'),`${count}: mouse leave did not restore default`);
 }
 for(const [count,file,total,layers] of previews){
- await section(2).getByRole('button',{name:new RegExp(`${count} porciones`)}).click();
+ await section(2).locator('.portion-options').getByRole('button',{name:new RegExp(`${count} porciones`)}).click();
  assert.ok(await section(2).locator('.quote-section-content').isVisible(),`${count}: portion section closed`);
  assert.ok((await section(2).locator('.quote-portion-preview img').getAttribute('src')).endsWith(file),`${count}: wrong preview`);
  assert.ok((await section(2).locator('.quote-portion-preview').innerText()).includes(layers),`${count}: wrong layers`);
@@ -62,25 +70,25 @@ for(const [count,file,total,layers] of previews){
  assert.ok((await page.locator('.quote-live-summary').innerText()).includes(`${count} porciones`),`${count}: stale summary`);
  if(count===10||count===20)await shot(`portion-${count}-1440`);
 }
-await section(2).getByRole('button',{name:/15 porciones/}).click();
+await section(2).locator('.portion-options').getByRole('button',{name:/15 porciones/}).click();
 const portionScroll=await page.evaluate(()=>scrollY);
 await page.waitForTimeout(250);
 assert.equal(await page.evaluate(()=>scrollY),portionScroll,'Selecting portions triggered scroll');
-assert.ok(await section(2).getByRole('button',{name:/15 porciones/}).evaluate(el=>document.activeElement===el),'Selecting portions moved focus');
-await section(2).getByRole('button',{name:/25 porciones/}).hover();
+assert.ok(await section(2).locator('.portion-options').getByRole('button',{name:/15 porciones/}).evaluate(el=>document.activeElement===el),'Selecting portions moved focus');
+await section(2).locator('.portion-options').getByRole('button',{name:/25 porciones/}).hover();
 assert.ok((await portionImage.getAttribute('src')).endsWith('closing.webp'),'Hover after selection did not preview');
 await page.locator('.quote-intro').hover();
 assert.ok((await portionImage.getAttribute('src')).endsWith('custom-design.webp'),'Mouse leave did not restore selected portion');
 assert.equal(await page.locator('.aside-price').innerText(),'Q460','Hover after selection changed price');
-await section(2).getByRole('button',{name:/25 porciones/}).focus();
+await section(2).locator('.portion-options').getByRole('button',{name:/25 porciones/}).focus();
 assert.ok((await portionImage.getAttribute('src')).endsWith('closing.webp'),'Keyboard focus did not preview');
 assert.equal(await page.locator('.aside-price').innerText(),'Q460','Keyboard focus changed price');
 await page.keyboard.press('Tab');
 assert.ok((await portionImage.getAttribute('src')).endsWith('custom-design.webp'),'Keyboard blur did not restore selection');
-await section(2).getByRole('button',{name:/20 porciones/}).focus();await page.keyboard.press('Enter');
+await section(2).locator('.portion-options').getByRole('button',{name:/20 porciones/}).focus();await page.keyboard.press('Enter');
 assert.equal(await page.locator('.aside-price').innerText(),'Q545','Keyboard selection did not confirm');
 assert.ok(await section(2).locator('.quote-section-content').isVisible(),'Keyboard selection closed portions');
-await section(2).getByRole('button',{name:/15 porciones/}).click();
+await section(2).locator('.portion-options').getByRole('button',{name:/15 porciones/}).click();
 await section(1).locator('.quote-section-head').click();await opened(1);
 await page.waitForTimeout(1300);
 assert.ok(await section(1).locator('.quote-section-content').isVisible(),'Manual contact section closed after timer');
@@ -104,7 +112,7 @@ assert.equal(await page.locator('.aside-price').innerText(),'Q525');
 await shot('quote-progress-1440');
 await section(6).getByRole('button',{name:/Revisar solicitud/}).click();await opened(7);await section(7).getByText('Sin nueces').waitFor();await section(7).locator('.review-image').waitFor();
 // Edit an earlier choice without losing the later fields or uploaded reference.
-await section(2).locator('.quote-section-head').click();await section(2).getByRole('button',{name:/20 porciones/}).click();assert.ok(await section(2).locator('.quote-section-content').isVisible());
+await section(2).locator('.quote-section-head').click();await section(2).locator('.portion-options').getByRole('button',{name:/20 porciones/}).click();assert.ok(await section(2).locator('.quote-section-content').isVisible());
 await section(7).locator('.quote-section-head').click();await opened(7);assert.equal(await page.locator('.aside-price').innerText(),'Q610');assert.ok(await section(7).locator('.review-image').isVisible());await section(7).getByText('Sin nueces').waitFor();
 await section(7).locator('.accept input').check();await section(7).getByRole('button',{name:/Enviar solicitud/}).click();
 const id=(await page.locator('.success-card strong').innerText()).trim();assert.ok(id.startsWith('AB-'));await page.goto(base+'/admin');await page.getByText('Avisos de correo simulados').waitFor();await page.getByText('Nueva solicitud de Prueba QA').waitFor();await shot('crm-after-quote-1440');
@@ -116,17 +124,17 @@ await page.goto(base+'/admin/produccion');const production=page.locator('.produc
 await page.goto(base+'/admin/clientes');await page.getByPlaceholder('Buscar por nombre').fill('Ana');assert.equal(await page.locator('.customer-card').count(),1);
 await page.goto(base+'/productos');await page.locator('.catalog-grid img').first().evaluate(img=>img.decode());
 // Candy Bar follows the same saved model and advances after its product group is complete.
-const candy=await context.newPage();candy.on('pageerror',error=>errors.push(error.message));candy.on('console',message=>{if(message.type()==='error')errors.push(message.text())});candy.on('response',response=>{if(response.status()===404)errors.push(`404 ${response.url()}`)});await candy.goto(base+'/cotiza-tu-propio-pastel');const candySection=index=>candy.locator(`[data-quote-section="${index}"]`);await candySection(0).getByRole('button',{name:/Producto para Candy Bar/}).click();await candySection(1).locator('.quote-section-content').waitFor();await candySection(1).getByPlaceholder('Tu nombre y apellido').fill('Candy QA');await candySection(1).getByPlaceholder('+502 0000 0000').fill('+502 5555 0102');await candySection(2).locator('.quote-section-content').waitFor();await candySection(2).getByPlaceholder('Ej. producto para mesa dulce').fill('Macarons');const firstPrice=await candy.locator('.aside-price').innerText();await candySection(2).getByRole('button',{name:/Agregar producto/}).click();await candySection(2).getByPlaceholder('Ej. producto para mesa dulce').nth(1).fill('Cupcakes');const secondPrice=await candy.locator('.aside-price').innerText();assert.notEqual(firstPrice,secondPrice);await candySection(3).locator('.quote-section-content').waitFor();await candySection(3).getByRole('button',{name:'Necesito apoyo con el diseño'}).click();await candySection(4).locator('.quote-section-content').waitFor();await candy.close();
-const mobile=await browser.newContext({viewport:{width:390,height:850},isMobile:true,hasTouch:true,reducedMotion:'reduce'});const mobilePage=await mobile.newPage();mobilePage.on('pageerror',error=>errors.push(error.message));mobilePage.on('console',message=>{if(message.type()==='error')errors.push(message.text())});mobilePage.on('response',response=>{if(response.status()===404)errors.push(`404 ${response.url()}`)});await mobilePage.goto(base+'/');await shot('hero-390',mobilePage);assert.equal(await mobilePage.locator('.calm-hero-visual').evaluate(el=>getComputedStyle(el).transform),'none');await mobilePage.goto(base+'/cotiza-tu-propio-pastel');await mobilePage.locator('.type-card').first().tap();await mobilePage.locator('[data-quote-section="1"] .quote-section-content').waitFor();assert.equal(await mobilePage.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await shot('quote-selected-390',mobilePage);
+const candy=await context.newPage();candy.on('pageerror',error=>errors.push(error.message));candy.on('console',message=>{if(message.type()==='error')errors.push(message.text())});candy.on('response',response=>{if(response.status()===404)errors.push(`404 ${response.url()}`)});await candy.goto(base+'/cotiza-tu-propio-pastel');const candySection=index=>candy.locator(`[data-quote-section="${index}"]`);await candySection(0).getByRole('button',{name:/Producto para Candy Bar/}).click();await candySection(1).locator('.quote-section-head').click();await candySection(1).locator('.quote-section-content').waitFor();await candySection(1).getByPlaceholder('Tu nombre y apellido').fill('Candy QA');await candySection(1).getByPlaceholder('+502 0000 0000').fill('+502 5555 0102');await candySection(2).locator('.quote-section-head').click();await candySection(2).locator('.quote-section-content').waitFor();await candySection(2).getByPlaceholder('Ej. producto para mesa dulce').fill('Macarons');const firstPrice=await candy.locator('.aside-price').innerText();await candySection(2).getByRole('button',{name:/Agregar producto/}).click();await candySection(2).getByPlaceholder('Ej. producto para mesa dulce').nth(1).fill('Cupcakes');const secondPrice=await candy.locator('.aside-price').innerText();assert.notEqual(firstPrice,secondPrice);await candySection(3).locator('.quote-section-head').click();await candySection(3).locator('.quote-section-content').waitFor();await candySection(3).getByRole('button',{name:'Necesito apoyo con el diseño'}).click();await candySection(4).locator('.quote-section-head').click();await candySection(4).locator('.quote-section-content').waitFor();await candy.close();
+const mobile=await browser.newContext({viewport:{width:390,height:850},isMobile:true,hasTouch:true,reducedMotion:'reduce'});const mobilePage=await mobile.newPage();mobilePage.on('pageerror',error=>errors.push(error.message));mobilePage.on('console',message=>{if(message.type()==='error')errors.push(message.text())});mobilePage.on('response',response=>{if(response.status()===404)errors.push(`404 ${response.url()}`)});await mobilePage.goto(base+'/');await shot('hero-390',mobilePage);assert.equal(await mobilePage.locator('.calm-hero-visual').evaluate(el=>getComputedStyle(el).transform),'none');await mobilePage.goto(base+'/cotiza-tu-propio-pastel');await mobilePage.locator('.type-card').first().tap();await mobilePage.locator('[data-quote-section="1"] .quote-section-head').click();await mobilePage.locator('[data-quote-section="1"] .quote-section-content').waitFor();assert.equal(await mobilePage.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await shot('quote-selected-390',mobilePage);
 const mobileSection=index=>mobilePage.locator(`[data-quote-section=\"${index}\"]`);
 await mobileSection(1).getByPlaceholder('Tu nombre y apellido').fill('Móvil QA');
 await mobileSection(1).getByPlaceholder('+502 0000 0000').fill('+502 5555 0103');
-await mobileSection(2).locator('.quote-section-content').waitFor();
-await mobileSection(2).getByRole('button',{name:/20 porciones/}).tap();
+await mobileSection(2).locator('.quote-section-head').click();await mobileSection(2).locator('.quote-section-content').waitFor();
+await mobileSection(2).locator('.portion-options').getByRole('button',{name:/20 porciones/}).tap();
 assert.equal(await mobilePage.locator('.aside-price').innerText(),'Q545','Touch did not confirm portions');
 assert.ok(await mobileSection(2).locator('.quote-section-content').isVisible(),'Touch closed portions');
 assert.ok((await mobileSection(2).locator('.quote-portion-preview img').getAttribute('src')).endsWith('design-help.webp'),'Touch preview failed');
-await mobileSection(2).getByRole('button',{name:/10 porciones/}).tap();
+await mobileSection(2).locator('.portion-options').getByRole('button',{name:/10 porciones/}).tap();
 assert.ok(await mobileSection(2).locator('.quote-section-content').isVisible());await mobileSection(3).locator('.quote-section-head').click();await mobileSection(3).locator('.quote-section-content').waitFor();await mobileSection(3).evaluate(el=>window.scrollTo({top:window.scrollY+el.getBoundingClientRect().top-82,behavior:'instant'}));await shot('portion-10-390',mobilePage);
 await mobileSection(3).getByPlaceholder('Cuéntanos cómo imaginas tu pastel...').fill('Flores rosadas');
 await mobileSection(3).locator('textarea').evaluate(el=>el.blur());
@@ -145,4 +153,4 @@ const mobileId=(await mobilePage.locator('.success-card strong').innerText()).tr
 await mobilePage.goto(base+'/admin/cotizaciones');await mobilePage.getByText(mobileId).first().waitFor();
 assert.equal(await mobilePage.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
 await mobile.close();
-await browser.close();assert.deepEqual(errors,[]);console.log(JSON.stringify({savedId:id,mobileId,portionPrices:previews.map(([count,,total])=>`${count}: ${total}`),finalEstimate:'Q610',candyPrices:[firstPrice,secondPrice],heroFade:[start,faded],routesVerified:7,errors},null,2));
+await browser.close();assert.deepEqual(errors,[]);console.log(JSON.stringify({savedId:id,mobileId,portionPrices:previews.map(([count,,total])=>`${count}: ${total}`),finalEstimate:'Q610',candyPrices:[firstPrice,secondPrice],heroOpacity:[start,faded],routesVerified:7,errors},null,2));

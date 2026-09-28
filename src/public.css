@@ -1,6 +1,5 @@
 /* Experiencia pública: estilos acotados para conservar intacta la interfaz administrativa. */
-.public-page [data-reveal]{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s cubic-bezier(.22,1,.36,1);transition-delay:var(--reveal-delay,0ms)}
-.public-page [data-reveal].is-visible{opacity:1;transform:none}
+.public-page [data-reveal]{opacity:1;transform:none;transition:none}
 .public-page button:focus-visible,.gallery-lightbox button:focus-visible{outline:3px solid #ae7868;outline-offset:3px}
 .public-page .btn,.public-page .text-link{transition:background-color .22s,color .22s,transform .22s,box-shadow .22s}
 .public-hero{background:#f5eee7}
@@ -109,3 +108,23 @@
 .photo-gallery .gallery-tile-caption{background:transparent;padding:0;font:inherit;color:#fff;left:18px;bottom:16px}
 .photo-gallery .gallery-zoom{left:auto;bottom:auto;right:14px;top:14px;padding:0;font:inherit}
 .closing-section .contact-details small{display:block}
+
+/* Editorial, horizontal cards for public collections and process. */
+.public-product-grid,.catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.public-product-grid .editorial-card,.catalog-grid .editorial-card{display:grid;grid-template-columns:minmax(145px,42%) minmax(0,1fr);min-height:216px}
+.public-product-grid .editorial-card-media,.catalog-grid .editorial-card-media{height:100%;min-height:216px}
+.public-product-grid .editorial-card-body,.catalog-grid .editorial-card-body{padding:20px 21px}
+.public-product-grid .editorial-card h3,.catalog-grid .editorial-card h3{font-size:clamp(19px,2vw,23px)}
+.public-product-grid .editorial-card p,.catalog-grid .editorial-card p{min-height:0;margin-bottom:15px}
+.public-process .process-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
+.public-process .process-item{grid-column:span 2;min-height:158px;background:#f7f1ea;border:1px solid #ddcfc3;padding:20px 22px}
+.public-process .process-item:nth-child(n+4){grid-column:span 3}
+.public-process .process-dot{display:none}
+.public-process .process-item h3{margin:12px 0 5px}
+.public-process .process-item p{margin:0}
+@media(max-width:900px){.public-product-grid,.catalog-grid{grid-template-columns:1fr}.public-product-grid .editorial-card,.catalog-grid .editorial-card{min-height:205px}.public-product-grid .editorial-card-media,.catalog-grid .editorial-card-media{min-height:205px}}
+@media(max-width:640px){.public-product-grid .editorial-card,.catalog-grid .editorial-card{grid-template-columns:minmax(115px,38%) minmax(0,1fr);min-height:184px}.public-product-grid .editorial-card-media,.catalog-grid .editorial-card-media{min-height:184px}.public-product-grid .editorial-card-body,.catalog-grid .editorial-card-body{padding:15px}.public-product-grid .editorial-card h3,.catalog-grid .editorial-card h3{font-size:18px;margin:7px 0}.public-product-grid .editorial-card p,.catalog-grid .editorial-card p{font-size:11px;line-height:1.4;margin-bottom:10px}.public-process .process-grid{grid-template-columns:1fr}.public-process .process-item,.public-process .process-item:nth-child(n+4){grid-column:auto;min-height:0;padding:16px 18px}.public-process .process-item h3{margin:5px 0}.public-process .process-item p{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.public-page [data-reveal],.public-page [data-reveal].is-visible{opacity:1;transform:none;transition:none}.editorial-card,.editorial-card-media img{transition:none}}
+.public-product-grid .editorial-card,.catalog-grid .editorial-card{height:226px;min-height:0}
+.public-product-grid .editorial-card-media,.catalog-grid .editorial-card-media{min-height:0}
+@media(max-width:640px){.public-product-grid .editorial-card,.catalog-grid .editorial-card{height:190px}.public-product-grid .editorial-card-media,.catalog-grid .editorial-card-media{min-height:0}}

@@ -1,6 +1,6 @@
 # Fotografías provisionales de la demo
 
-Estas imágenes son **referencias visuales de terceros**, no fotografías atribuidas a Awake & Bake. Se descargaron localmente en WebP desde las páginas de Unsplash indicadas abajo, publicadas como gratuitas bajo la [licencia de Unsplash](https://unsplash.com/license). Su uso en esta demo es provisional; la selección visual y cualquier uso de marca deben validarse con Awake & Bake antes de presentar el sitio como oficial. No se descargaron imágenes de Instagram ni se depende de su CDN.
+Estas imágenes son **referencias visuales de terceros**, no fotografías atribuidas a Awake & Bake. Se descargaron localmente en WebP desde las páginas de Unsplash indicadas abajo, publicadas como gratuitas bajo la [licencia de Unsplash](https://unsplash.com/license). Su uso en esta demo es provisional; la selección visual y cualquier uso de marca deben validarse con Awake & Bake antes de presentar el sitio como oficial. Las fotografías de producto no proceden de Instagram. El logo sí se descargó de la imagen de perfil oficial y se sirve como archivo local; la interfaz no depende del CDN de Instagram.
 
 El hero utiliza `xv.webp`. En el cotizador, `src/visuals.ts` asigna las imágenes por tipo de solicitud y las vistas de 10, 15, 20 y 25 porciones. **Estas fotos ilustran estilos diferentes; no muestran un producto de Awake & Bake ni verifican las dimensiones indicadas para cada tamaño.** Las medidas son referencias textuales separadas de la fotografía.
 
@@ -21,6 +21,10 @@ El hero utiliza `xv.webp`. En el cotizador, `src/visuals.ts` asigna las imágene
 | `gallery-macarons.webp` | Karlis Dambrans | [Macarons rosados](https://unsplash.com/photos/macarons-in-white-ball-selective-focus-photography-oLHk_WLupSc) |
 | `gallery-cupcakes.webp` | Jeremy Liew | [Cupcakes](https://unsplash.com/photos/cupcakes-h2Nh6OMFG9U) |
 | `closing.webp` | Lucas T Photography | [Pastel de boda blanco](https://unsplash.com/photos/elegant-white-tiered-wedding-cake-with-topper-a4AXm3Kteug) |
+
+## Logo original
+
+`logo-ab-instagram.jpg` es una copia sin alterar de la imagen de perfil de [@awakeandbakegt](https://www.instagram.com/awakeandbakegt/), obtenida del metadato `og:image` del perfil el 28/09/2026. Es un JPEG de 100 × 100 px que coincide con el emblema negro A&B facilitado como referencia. Se usa en header, footer, panel y favicon. Solicitar el archivo original de mayor resolución antes de publicar un sitio oficial.
 
 ## Sustitución
 
